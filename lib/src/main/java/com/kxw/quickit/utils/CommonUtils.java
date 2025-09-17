@@ -30,6 +30,9 @@ public class CommonUtils {
     }
 
     public static void randomSleep(int seconds) {
+        if (seconds <= 0) {
+            return;
+        }
         sleep(ThreadLocalRandom.current().nextInt(seconds));
     }
 

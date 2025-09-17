@@ -1,6 +1,5 @@
 package com.kxw.quickit;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,7 +35,7 @@ public class ReadWriteLockWrapperTest {
 
         Supplier<List<String>> loadFromRemote = () -> Collections.singletonList("fff");
         Supplier<List<String>> loadFromCache = Collections::emptyList;
-        Function<List<String>, Boolean> isExist = CollectionUtils::isNotEmpty;
+        Function<List<String>, Boolean> isExist = list -> list != null && !list.isEmpty();
 
         List<String> result = lockWrapper.execute(loadFromRemote, loadFromCache, isExist);
 

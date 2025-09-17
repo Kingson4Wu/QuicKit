@@ -48,13 +48,13 @@ public class ExecutionFrequencyUtils {
 
             int finalDelaySeconds = delaySeconds;
 
-            list.stream().parallel().forEach(task -> {
+            for (Task task : list) {
                 getTimer().newTimeout(timeout -> {
                     if (!isStop(taskName)) {
                         task.run();
                     }
                 }, finalDelaySeconds, TimeUnit.SECONDS);
-            });
+            }
             delaySeconds++;
         }
     }
@@ -66,11 +66,11 @@ public class ExecutionFrequencyUtils {
 
             CommonUtils.sleep(1);
 
-            list.stream().parallel().forEach(task -> {
+            for (Task task : list) {
                 if (!isStop(taskName)) {
                     task.run();
                 }
-            });
+            }
         }
     }
 
@@ -84,7 +84,14 @@ public class ExecutionFrequencyUtils {
             return Collections.emptyList();
         }
 
+        if (Objects.isNull(taskList) || taskList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         int executeNum = executeNumPerSeconds(taskName) > 0 ? executeNumPerSeconds(taskName) : executeNumPerSeconds;
+        if (executeNum <= 0) {
+            executeNum = 1;
+        }
 
         List<List<Task>> subList = taskLimit > 0 ?
                 Lists.partition(taskList.subList(0, Math.min(taskList.size(), taskLimit)), executeNum) :

@@ -1,7 +1,5 @@
 package com.kxw.quickit;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,14 +11,10 @@ import java.util.stream.Collectors;
 
 public class ParallelTask {
 
-    private List<Task> taskList;
+    private final List<Task> taskList = new ArrayList<>(4);
 
     public static ParallelTask newTask() {
-
-        ParallelTask parallelTask = new ParallelTask();
-        parallelTask.taskList = new ArrayList<>(4);
-
-        return parallelTask;
+        return new ParallelTask();
     }
 
     public ParallelTask addTask(Task task) {
@@ -29,10 +23,7 @@ public class ParallelTask {
     }
 
     public void execute() {
-        if (CollectionUtils.isNotEmpty(taskList)) {
-
-            taskList.parallelStream().forEach(Task::run);
-        }
+        taskList.parallelStream().forEach(Task::run);
     }
 
     public void execute(ExecutorService executor) throws InterruptedException, ExecutionException {
